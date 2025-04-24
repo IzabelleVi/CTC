@@ -1,25 +1,23 @@
 import torch
 import torchaudio
 import numpy as np
-import librosa
 import matplotlib.pyplot as plt
 from datasets import load_dataset
 from transformers import Wav2Vec2Processor, Wav2Vec2ForCTC, Wav2Vec2CTCTokenizer
 import ctc_segmentation
+from sklearn.metrics import precision_recall_fscore_support
 
 # Load pretrained Wav2Vec 2.0 model 
-model_name = "jonatasgrosman/wav2vec2-large-xlsr-53-english"
-processor = Wav2Vec2Processor.from_pretrained(model_name)
-tokenizer = Wav2Vec2CTCTokenizer.from_pretrained(model_name)
-model = Wav2Vec2ForCTC.from_pretrained(model_name)
+processor = Wav2Vec2Processor.from_pretrained("./Dutch only model")
+tokenizer = Wav2Vec2CTCTokenizer.from_pretrained("./Dutch only model")
+model = Wav2Vec2ForCTC.from_pretrained("./Dutch only model")
 
 # Set model to evaluation mode
 model.eval()
-
 print("Model loaded successfully")
 
 # Load the Common Voice dataset (English subset)
-dataset_large = load_dataset("mozilla-foundation/common_voice_13_0", "en", split="test")
+dataset_large = load_dataset("mozilla-foundation/common_voice_13_0", "en", split="test", trust_remote_code=True)
 dataset = dataset_large.select(range(10))
 
 print("Dataset loaded successfully")
